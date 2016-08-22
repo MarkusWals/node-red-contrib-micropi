@@ -1,0 +1,56 @@
+<script type="text/javascript">
+    RED.nodes.registerType('microPi',{
+        category: 'input',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:"microPi"},
+			filename: {value:"/home/pi/audio/demo.wav"},
+			domain: {value:"http://localhost:1880"},
+			samplerate: {value:"16000"},
+			bitdepth: {value:"16"},
+			channels: {value:"2"},
+			silence: {value:"10"}
+        },
+        inputs:1,
+        outputs:2,
+        icon: "feed.png",
+        label: function() {
+            return this.name||"speech2text";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="microPi">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-input-filename"><i class="icon-tag"></i>Filename</label>
+        <input type="text" id="node-input-filename" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-input-domain"><i class="icon-tag"></i>Domain</label>
+        <input type="text" id="node-input-domain" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-input-samplerate"><i class="icon-tag"></i>Sampling Rate (Hz)</label>
+        <input type="text" id="node-input-samplerate" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-input-bitdepth"><i class="icon-tag"></i>Bit Depth (Bit)</label>
+        <input type="text" id="node-input-bitdepth" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-input-channels"><i class="icon-tag"></i>Channels</label>
+        <input type="text" id="node-input-channels" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-input-silence"><i class="icon-tag"></i>Silence Timeout (sec)</label>
+        <input type="text" id="node-input-silence" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="microPi">
+    <p>microPi is a simple node that uses `arecord` ALSA tools on Linux or SoX on OSX & Windows to capture sound from a USB audio device</p>
+</script>
