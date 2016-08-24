@@ -6,7 +6,7 @@
 //http://stackoverflow.com/questions/34364583/how-to-use-the-write-function-for-wav-module-in-nodejs
 //http://noderedguide.com/index.php/2015/10/28/node-red-lecture-3-basic-nodes-and-flows/#h.5zaw60nvfsyj
 
-//TODO raw output, msg.channels, .samplerate, input fields, silence status
+//TODO audio stream output, status output
 
 module.exports = function(RED) {
     function micropiNode(config) {
@@ -124,7 +124,6 @@ module.exports = function(RED) {
                     node.log("filename set to: " + filename);
                     node.log("path set to: " + path);		
 
-                    micInstance = mic({ 'rate': config.samplerate, 'channels': config.channels, 'debug': true, 'exitOnSilence': 6 });
                     micInputStream = micInstance.getAudioStream();
 
                     outputRawFileStream = fs.WriteStream(filename+".raw");
@@ -141,11 +140,6 @@ module.exports = function(RED) {
 			} else if (msg.payload == false || msg.record == false) {
 		
 				micInstance.stop();
-			
-				/*if (micInputStream.closeFileStream) {
-					node.status({}); //remove status
-					outputFileStream.end();
-				}*/
 				
 				var outMsg = {payload: config.domain + "/getAudio"};
 					//outMsg.file = outputFileStream;
