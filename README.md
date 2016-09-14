@@ -1,7 +1,9 @@
-<<<<<<< Updated upstream
 #node-red-contrib-micropi 
-A Node for Recording Audio Files in Node-Red on a Raspberry Pi with AlsaSound 
-=======
-#micropi 
-a simple node that uses ALSA tools on Linux to capture sound from an USB audio device
->>>>>>> Stashed changes
+
+A set of nodes for recording and streaming audio from an usb microphone connected to a Raspberry Pi in Node-Red.
+
+##Nodes:
+
+####MicroPi
+####Microphone
+####Wav-Filewriter
