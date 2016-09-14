@@ -1,0 +1,43 @@
+<script type="text/javascript">
+    RED.nodes.registerType('wav-filewriter',{
+        category: 'storage',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            path: {value:""},
+            mode: {value: "700"}
+        },
+        icon: "db.png",
+        inputs:1,
+        outputs:1,
+        label: function() {
+            return this.name||"wav-filewriter";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="wav-filewriter">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> name</label>
+        <input type="text" id="node-input-name" placeholder="name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-path"><i class="icon-tag"></i> path</label>
+        <input type="text" id="node-input-path" placeholder="">
+    </div>
+    <div class="form-row">
+        <label for="node-input-mode"><i class="icon-tag"></i> mode</label>
+        <input type="text" id="node-input-mode" placeholder="">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="wav-filewriter">
+  <p>Creates .wav File from raw Audio Data.</p>
+  <p></p>
+  <p>Connect it to a Node that creates Audio Output. You can set </p>
+  <ul>
+    <li>name - the name of the node</li>
+    <li>path - the path where it will be saved. creates new file if not existing</li>
+    <li>mode, sets read, write, execute permissions. e.g. 700 = owner has all permissions</li>
+  </ul>
+</script>

@@ -6,13 +6,16 @@
             name: {value:"microPi"},
 			filename: {value:"/home/pi/audio/demo.wav"},
 			domain: {value:"http://localhost:1880"},
-			samplerate: {value:"16000"},
-			bitdepth: {value:"16"},
+			rate: {value:"16000"},
+			bitwidth: {value:"16"},
+            endian: {value: "little"},
+            encoding: {value: "signed-integer"},
 			channels: {value:"2"},
-			silence: {value:"10"}
+			silence: {value:"10"},
+            debug: {value: true}
         },
         inputs:1,
-        outputs:2,
+        outputs:3,
         icon: "feed.png",
         label: function() {
             return this.name||"speech2text";
@@ -33,13 +36,21 @@
         <label for="node-input-domain"><i class="icon-tag"></i>Domain</label>
         <input type="text" id="node-input-domain" placeholder="Name">
     </div>
-	<div class="form-row">
-        <label for="node-input-samplerate"><i class="icon-tag"></i>Sampling Rate (Hz)</label>
-        <input type="text" id="node-input-samplerate" placeholder="Name">
+    <div class="form-row">
+        <label for="node-input-endian"><i class="icon-tag"></i> Endian</label>
+        <input type="text" id="node-input-endian" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-encoding"><i class="icon-tag"></i> Encoding</label>
+        <input type="text" id="node-input-encoding" placeholder="Name">
     </div>
 	<div class="form-row">
-        <label for="node-input-bitdepth"><i class="icon-tag"></i>Bit Depth (Bit)</label>
-        <input type="text" id="node-input-bitdepth" placeholder="Name">
+        <label for="node-input-rate"><i class="icon-tag"></i>Sampling Rate (Hz)</label>
+        <input type="text" id="node-input-rate" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-input-bitwidth"><i class="icon-tag"></i>Bit Width (Bit)</label>
+        <input type="text" id="node-input-bitwidth" placeholder="Name">
     </div>
 	<div class="form-row">
         <label for="node-input-channels"><i class="icon-tag"></i>Channels</label>
@@ -48,6 +59,13 @@
 	<div class="form-row">
         <label for="node-input-silence"><i class="icon-tag"></i>Silence Timeout (sec)</label>
         <input type="text" id="node-input-silence" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-debug"><i class="icon-tag"></i> Debug</label>
+        <select id="node-input-debug">
+                <option value=false>false</option>
+                <option value=true>true</option>
+        </select>
     </div>
 </script>
 
