@@ -6,7 +6,8 @@ module.exports = function(RED) {
     var name = config.name;
     var options = config;
     delete options.name;
-    this.active = config.active;
+    const node = this;
+    node.active = config.active;
     var timeout = (options.silence * 1000) || 5000;
 
     //options.debug forwards a string instead of boolean, so we need to convert...
@@ -15,8 +16,7 @@ module.exports = function(RED) {
     } else {
         options.debug = false;
     }
-
-    const node = this;
+    
     const Mic = require('./lib/mic');
     const mic = new Mic(options);
     var audioStream = undefined;
@@ -26,7 +26,7 @@ module.exports = function(RED) {
     const nodeStatusPaused = {fill: "red", shape: "dot", text: "paused"};
     const nodeStatusSilence = {fill: "green", shape: "dot", text: "silence.."};
 
-    this.on('input', (msgIn) => {
+    node.on('input', (msgIn) => {
         //it's important to know that javascript will make a conversion to boolean for msg.payload
         //e.g. "true" becomes true, "false" becomes true and so on
         //this can lead to unexpected behaviour
