@@ -19,7 +19,7 @@ module.exports = function(RED) {
     const node = this;
     const Mic = require('./lib/mic');
     const mic = new Mic(options);
-    let audioStream = undefined;
+    var audioStream = undefined;
 
     //define state recording and set it to node
     const nodeStatusRecording = {fill: "red", shape: "ring", text: "recording"};
