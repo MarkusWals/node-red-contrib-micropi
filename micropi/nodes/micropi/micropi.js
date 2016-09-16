@@ -142,6 +142,3 @@ module.exports = function(RED) {
     }
     RED.nodes.registerType('microPi', micropiNode);
 }
-
-    Contact GitHub API Training Shop Blog About 
-
