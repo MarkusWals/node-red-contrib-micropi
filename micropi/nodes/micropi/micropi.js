@@ -38,7 +38,6 @@ module.exports = function(RED) {
 		}.bind(this);
 		
 		function startRecord() {
-			node.status({fill:"red",shape:"dot",text:"recording"});
 			msgOut.status="recording";
 			this.send(msgOut);
             mic.start(node, timeout);
@@ -46,7 +45,6 @@ module.exports = function(RED) {
 		}
 
 		function stopRecord(){
-			node.status({fill:"red",shape:"dot",text:"stopped"});
 			msgOut.status="stopped";
 			this.send(msgOut);
             mic.stop();
