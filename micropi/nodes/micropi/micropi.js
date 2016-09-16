@@ -57,7 +57,7 @@ module.exports = function(RED) {
         });
 
         this.startRecord = function(timeout) {
-            outputFileStream = new wav.FileWriter(path+filename, {						channels: this.channels,
+            outputFileStream = new wav.FileWriter(filename, {						channels: this.channels,
                     sampleRate: this.rate,
                     bitDepth: this.bitwidth
                 });
