@@ -15,7 +15,14 @@ module.exports = function(RED) {
         var node = this;
         
 		var filename = options.filename;
+        var timeout = (config.silence * 1000) || 5000;
+
         var msgOut;
+        
+        //define state recording and set it to node
+        const nodeStatusRecording = {fill: "red", shape: "ring", text: "recording"};
+        const nodeStatusPaused = {fill: "red", shape: "dot", text: "paused"};
+        const nodeStatusSilence = {fill: "green", shape: "dot", text: "silence.."};
     
 		var audioStream = function(audioData) {
 			msgOut.stream=audioData;
@@ -34,14 +41,16 @@ module.exports = function(RED) {
 			node.status({fill:"red",shape:"dot",text:"recording"});
 			msgOut.status="recording";
 			this.send(msgOut);
-			mic.startRecording(errorStream, audioStream, infoStream);
+            mic.start(node, timeout);
+			//mic.startRecording(errorStream, audioStream, infoStream);
 		}
 
 		function stopRecord(){
 			node.status({fill:"red",shape:"dot",text:"stopped"});
 			msgOut.status="stopped";
 			this.send(msgOut);
-			mic.stopRecording();
+            mic.stop();
+			//mic.stopRecording();
 			node.status({}); //remove status
 		}
 		
