@@ -14,6 +14,10 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
 
         var name = config.name;
+        var bitwidth = config.bitwidth;
+        var channels = config.channels;
+        var rate = config.rate;
+        var filename = config.filename;
         var options = config;
         delete options.name;
         var timeout = (config.silence * 1000) || 5000;
@@ -28,7 +32,12 @@ module.exports = function(RED) {
         const node = this;
         const Mic = require('./lib/mic');
         const mic = new Mic(options);
+        
+        const fs = require('fs');
+		const wav = require('wav');
+        
         let audioStream = undefined;
+        var outputFileStream;
 
         //define state recording and set it to node
         const nodeStatusRecording = {fill: "red", shape: "ring", text: "recording"};
@@ -39,15 +48,20 @@ module.exports = function(RED) {
             //it's important to know that javascript will make a conversion to boolean for msg.payload
             //e.g. "true" becomes true, "false" becomes true and so on
             //this can lead to unexpected behaviour
-            if (msgIn.payload) {
+            if (msgIn.payload === true) {
                 timeout = msgIn.silence || timeout; //if msgIn.silence exists set it to timeout, else leave timeout from the editpanel
                 this.startRecord(timeout);
-            } else {
+            } else if(msgIn.payload === false){
                 this.stopRecord();
             }
         });
 
         this.startRecord = function(timeout) {
+            outputFileStream = new wav.FileWriter(path+filename, {						channels: this.channels,
+                    sampleRate: this.rate,
+                    bitDepth: this.bitwidth
+                });
+            outputFileStream.write(audioStream);
             mic.start(node, timeout);
         }
 
@@ -61,7 +75,8 @@ module.exports = function(RED) {
             });
 
             audioStream.on('stopComplete', () => {
-                node.send({status: 'stopRecording', payload: ''});
+                outputFileStream.end();
+                node.send({status: 'stopRecording', payload: '', meta: options});
                 node.status({});
             });
 
@@ -84,7 +99,7 @@ module.exports = function(RED) {
 
             audioStream.on('data', (data) => {
                 if(!audioStream.isSilenced()) {
-                    node.send({status: 'data', payload: data});
+                    node.send({status: 'data', payload: data, meta: options});
                 }
             });
 
