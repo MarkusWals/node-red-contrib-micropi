@@ -3,7 +3,7 @@
         category: 'input',
         color: '#a6bbcf',
         defaults: {
-            name: {value:"micropi"},
+            name: {value:"microPi"},
             filename: {value:"/home/pi/demo.wav"},
             endian: {value:"little"},
             bitwidth: {value:"16"},
@@ -18,17 +18,17 @@
         inputs: 1,
         outputs:1,
         label: function() {
-            return this.name||"micropi";
+            return this.name||"microPi";
         },
         button: {
             toggle: "active",
             onclick: function() {
 
 
-                var label = this.name||"micropi";
+                var label = this.name||"microPi";
                 var node = this;
                 $.ajax({
-                    url: "micropi/"+this.id+"/"+(this.active?"disable":"enable"),
+                    url: "microPi/"+this.id+"/"+(this.active?"disable":"enable"),
                     type: "POST",
                     success: function(resp, textStatus, xhr) {
                         if (xhr.status == 200) {
@@ -52,7 +52,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="micropi">
+<script type="text/x-red" data-template-name="microPi">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> name</label>
         <input type="text" id="node-input-name" placeholder="name">
@@ -101,7 +101,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="micropi">
+<script type="text/x-red" data-help-name="microPi">
     <p>microPi is a simple node that uses `arecord` ALSA tools on Linux or SoX on OSX & Windows to capture sound from a USB audio device</p>
 </script>
 
