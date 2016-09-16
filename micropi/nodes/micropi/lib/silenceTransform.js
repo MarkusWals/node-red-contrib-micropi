@@ -12,7 +12,7 @@ var iife = ( function() {
         this.startTimer = function startTimer() {
 
             if (!_timer) {
-                console.log('new timer');
+                //console.log('new timer');
                 _timer = setTimeout(() => {
                     _isSilenced = true;
                     this.emit('silence')}, _timeout);
@@ -21,7 +21,7 @@ var iife = ( function() {
 
         this.resetTimer = function resetTimer() {
             if (_timer) {
-                console.log('IN CLEAR TIMEOUT');
+                //console.log('IN CLEAR TIMEOUT');
                 clearTimeout(_timer);
                 _timer = undefined;
             }
