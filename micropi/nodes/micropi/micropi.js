@@ -1,13 +1,3 @@
-//https://github.com/ashishbajaj99/mic
-//https://www.npmjs.com/package/mic
-//http://www.linuxcircle.com/2013/05/08/raspberry-pi-microphone-setup-with-usb-sound-card/
-//https://subvisual.co/blog/posts/39-tutorial-html-audio-capture-streaming-to-node-js-no-browser-extensions
-//http://nodered.org/docs/creating-nodes/node-js
-//http://stackoverflow.com/questions/34364583/how-to-use-the-write-function-for-wav-module-in-nodejs
-//http://noderedguide.com/index.php/2015/10/28/node-red-lecture-3-basic-nodes-and-flows/#h.5zaw60nvfsyj
-
-//TODO audio stream output, status output
-
 module.exports = function(RED) {
     function micropiNode(config) {
 
@@ -17,83 +7,141 @@ module.exports = function(RED) {
         var options = config;
         delete options.name;
         var timeout = (config.silence * 1000) || 5000;
-
-        //options.debug forwards a string instead of boolean, so we need to convert...
-        if (options.debug === "true") {
-            options.debug = true;
-        } else {
-            options.debug = false;
-        }
-
-        const node = this;
-        const Mic = require('./lib/mic');
+        
+		const Mic = require('./lib/mic');
         const mic = new Mic(options);
-        let audioStream = undefined;
+        
+		var wav = require('wav');
+        var node = this;
+        
+		var filename = options.filename;
+    
+		var audioStream = function(audioData) {
+			msgOut.stream=audioData;
+			this.send(msgOut);
+		}.bind(this);
 
-        //define state recording and set it to node
-        const nodeStatusRecording = {fill: "red", shape: "ring", text: "recording"};
-        const nodeStatusPaused = {fill: "red", shape: "dot", text: "paused"};
-        const nodeStatusSilence = {fill: "green", shape: "dot", text: "silence.."};
+		var infoStream = function(infoData) {
+			
+		}.bind(this);
 
-        this.on('input', (msgIn) => {
-            //it's important to know that javascript will make a conversion to boolean for msg.payload
-            //e.g. "true" becomes true, "false" becomes true and so on
-            //this can lead to unexpected behaviour
-            if (msgIn.payload) {
-                timeout = msgIn.silence || timeout; //if msgIn.silence exists set it to timeout, else leave timeout from the editpanel
-                this.startRecord(timeout);
-            } else {
-                this.stopRecord();
-            }
-        });
+		var errorStream = function(audioData) {
+			
+		}.bind(this);
+		
+		function startRecord() {
+			node.status({fill:"red",shape:"dot",text:"recording"});
+			msgOut.status="recording";
+			this.send(msgOut);
+			mic.startRecording(errorStream, audioStream, infoStream);
+		}
 
-        this.startRecord = function(timeout) {
-            mic.start(node, timeout);
-        }
-
-        //new stream was set up and is now available for binding events
-        node.on('streamAvailable', (_audioStream) => {
-            audioStream = _audioStream;
-
-            audioStream.on('startComplete', () => {
-                node.send({status: 'startRecording', payload: '', meta: options});
-                node.status(nodeStatusRecording);
-            });
-
-            audioStream.on('stopComplete', () => {
-                node.send({status: 'stopRecording', payload: ''});
-                node.status({});
-            });
-
-            audioStream.on('silence', () => {
-                console.log('event silence in microphone');
-                node.send({status: 'silence', payload: ''});
-                node.status(nodeStatusSilence);
-            });
-
-            audioStream.on('resumed', () => {
-                node.send({status: 'resumeRecording', payload: ''});
-                node.status(nodeStatusRecording);
-            });
-
-            audioStream.on('debug', (message) => {
-                if (options.debug) {
-                    node.warn(message);
-                }
-            });
-
-            audioStream.on('data', (data) => {
-                if(!audioStream.isSilenced()) {
-                    node.send({status: 'data', payload: data});
-                }
-            });
-
-        });
-
-        this.stopRecord = function (){
-            mic.stop();
-        }
-
+		function stopRecord(){
+			node.status({fill:"red",shape:"dot",text:"stopped"});
+			msgOut.status="stopped";
+			this.send(msgOut);
+			mic.stopRecording();
+			node.status({}); //remove status
+		}
+		
+		this.on('input', function(msg) {
+			if(msg.payload == true  || msg.record == true) {
+				if (msg.path) {
+					path = msg.path;
+				} else {
+					path = "/home/pi/audio/";
+				}
+				if (msg.filename) {
+					filename = msg.filename
+				} else {
+					filename = "test.wav";
+				}
+				node.log("filename set to: " + filename);
+				node.log("path set to: " + path);
+				startRecord();
+			} else if (msg.payload == false || msg.record == false) {
+				stopRecord();
+			}
+			
+		});
+			/*
+            if(msg.payload == true) {
+                node.log("msg received");
+				if (msg.path) {
+					path = msg.path;
+				} else {
+					path = "/home/pi/audio/";
+				}
+                node.log("path set to: " + path);
+				if (msg.filename) {
+					filename = msg.filename
+				} else {
+					filename = "test.wav";
+				}
+                node.log("filename set to: " + filename);
+				
+				http://stackoverflow.com/questions/34364583/how-to-use-the-write-function-for-wav-module-in-nodejs
+				
+				mic.startCapture();
+				node.log("started recording");
+                this.send([ {payload:"recording"} , {payload:"recording"} ]);
+				node.status({fill:"red",shape:"dot",text:"recording"});
+				
+				mic.audioStream.on('data', function(data) {
+					
+                    node.log(data);
+					var writer = new wav.FileWriter(path + filename, {
+						channels: 2,
+						sampleRate: 44100,
+						bitDepth: 16
+					});
+                    
+                    node.log("file metadata set to: 2Ch 16Bit 44.1kHz");
+                    
+					writer.write(String(data));
+                    node.log("writing data");
+                    
+                    if (writer.closeFileStream || data.closeFileStream) {
+                        node.status({}); //remove status
+                        writer.end();
+                        writer = null;
+                        node.log("writer.end() called");
+                        node.send(msg);
+                        node.status({}); //remove status
+                        var msg1 = {payload:writer};
+                        var msg2 = {file:path + filename};
+                        node.log("sending response message");
+                        node.send([ msg1 , msg2 ]);
+                    }
+				});				
+				
+				this.on('error', function(err) {
+					node.error('Error in microPi');
+					writer.end
+                    writer = null;
+					node.status({}); //remove status
+					msg1 = {payload:"error!"};
+				});
+				
+            } else if (msg.payload == false) {
+				mic.stopCapture();
+                node.log("stopped recording");
+                
+                //writer.end
+                //writer = undefined;
+				node.status({}); //remove status
+				//file.end();
+				
+				var msg1 = {payload:"stopped"};
+				var msg2 = {file:path + filename};
+				
+				node.log("sending response message");
+				this.send([ msg1 , msg2 ]);
+			}
+        });*/
     }
     RED.nodes.registerType('microPi', micropiNode);
 }
+
+    Contact GitHub API Training Shop Blog About 
+
