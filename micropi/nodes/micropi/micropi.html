@@ -5,6 +5,7 @@
         defaults: {
             name: {value:"microPi"},
 			filename: {value:"/home/pi/audio/demo.wav"},
+            domain: {value:"http://localhost:1880/getAudio"},
 			rate: {value:"16000"},
 			bitwidth: {value:"16"},
             endian: {value: "little"},
@@ -14,7 +15,7 @@
             debug: {value: false}
         },
         inputs:1,
-        outputs:1,
+        outputs:2,
         icon: "feed.png",
         label: function() {
             return this.name||"speech2text";
@@ -30,6 +31,11 @@
 	<div class="form-row">
         <label for="node-input-filename"><i class="icon-tag"></i>Filename</label>
         <input type="text" id="node-input-filename" placeholder="Name">
+    </div>
+    </div>
+	<div class="form-row">
+        <label for="node-input-domain"><i class="icon-tag"></i>Domain</label>
+        <input type="text" id="node-input-domain" placeholder="Name">
     </div>
     <div class="form-row">
         <label for="node-input-endian"><i class="icon-tag"></i> Endian</label>
