@@ -12,8 +12,8 @@ var iife = ( function() {
         this.startTimer = function startTimer() {
 
             if (!_timer) {
-                //console.log('new timer');
-                _timer = setTimeout(() => {
+                console.log('new timer');
+                _timer = setTimeout( () => {
                     _isSilenced = true;
                     this.emit('silence')}, _timeout);
             }
@@ -21,7 +21,6 @@ var iife = ( function() {
 
         this.resetTimer = function resetTimer() {
             if (_timer) {
-                //console.log('IN CLEAR TIMEOUT');
                 clearTimeout(_timer);
                 _timer = undefined;
             }
@@ -54,7 +53,7 @@ var iife = ( function() {
                         this.emit('debug', 'Found speech block');
                         this.resetTimer();
 
-                        if(_isSilenced){
+                        if(_isSilenced) {
                             _isSilenced = false;
                             this.emit('resumed');
                         }

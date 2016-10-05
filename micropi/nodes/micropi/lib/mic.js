@@ -20,15 +20,17 @@ var Mic = (function () {
     var _audioProcess = null;
     var _audioStream;
     var _infoStream;
-
-    var demiter = function (dmessage) {
-        _audioStream.emit('debug', dmessage);
-    }.bind(Mic);
+    var _filename;
+    var _demiter;
+    var _options;
+    //filewriter declaration
+    const _wav = require('wav');
+    let _fileWriter;
 
     //closure gets exported
     function Mic(options) {
-        options = options || {};
-
+        _options = options || {};
+        _filename = options.filename || '/home/pi/audio/demo.wav'
         _endian = options.endian || 'little';
         _bitwidth = options.bitwidth || '16';
         _encoding = options.encoding || 'signed-integer';
@@ -61,6 +63,12 @@ var Mic = (function () {
         if(_audioProcess === null) {
             _infoStream = new PassThrough;
             _audioStream = new IsSilence(timeout);
+
+            _demiter = function (dmessage) {
+                _audioStream.emit('debug', dmessage);
+            }.bind(Mic);
+            //instantiate wav-filewriter
+            _fileWriter = new _wav.FileWriter(_options.filename,{defaultEncoding: 'utf8', mode: '666', sampleRate: _options.rate, bitDepth: _options.bitwidth, channels: _options.channels, endian: _options.endianess});
             //informs node that the stream is available, this is necessary because node needs to listen for events before the whole start method has completed
             node.emit('streamAvailable', _audioStream);
 
@@ -71,24 +79,25 @@ var Mic = (function () {
 
             _audioProcess.on('exit', (code, sig) => {
                     _audioStream.emit('audioProcessExitComplete');
-                    demiter(`Process exits due to signal code ${sig} with code ${code}`);
+                    _demiter(`Process exits due to signal code ${sig} with code ${code}`);
                 });
 
             _audioProcess.stdout.pipe(_audioStream);
+            _audioProcess.stdout.pipe(_fileWriter.file);
             _audioProcess.stderr.pipe(_infoStream);
 
             _infoStream.on('data', (data) => {
-                        demiter('Received data from stderr: ' + data);
+                        _demiter('Received data from stderr: ' + data);
                     });
             _infoStream.on('error', (error) => {
-                        demiter('Error in stderr: ' + data);
+                        _demiter('Error in stderr: ' + data);
                     });
 
             _audioStream.emit('startComplete');
-            demiter('Microphone started');
+            _demiter('Microphone started');
 
         } else {
-            demiter('Microphone already started.');
+            _demiter('Microphone already started.');
         }
     };
 
@@ -98,9 +107,11 @@ var Mic = (function () {
             _audioProcess.kill('SIGKILL');
             _audioProcess = null;
             _audioStream.emit('stopComplete');
-            demiter('Microphone stopped');
+            _demiter('Microphone stopped');
         } else {
-            demiter('Microphone already stopped.');
+            if (_demiter){
+                _demiter('Microphone already stopped.');
+            }
         }
     };
 

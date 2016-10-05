@@ -54,6 +54,9 @@ module.exports = function(RED) {
         audioStream.on('stopComplete', () => {
             node.send({status: 'stopRecording', payload: ''});
             node.status({});
+
+            //remove all listeners preventing a memory leaks
+            audioStream.removeAllListeners();
         });
 
         audioStream.on('silence', () => {

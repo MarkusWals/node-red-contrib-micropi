@@ -5,20 +5,21 @@
         defaults: {
             name: {value:"microPi"},
 			filename: {value:"/home/pi/audio/demo.wav"},
-            domain: {value:"http://localhost:1880/getAudio"},
+			domain: {value:"http://localhost:1880"},
 			rate: {value:"16000"},
 			bitwidth: {value:"16"},
             endian: {value: "little"},
             encoding: {value: "signed-integer"},
 			channels: {value:"2"},
-			silence: {value:10},
-            debug: {value: false}
+			silence: {value:"10"},
+            debug: {value: true},
+            mode: {value: '666'}
         },
         inputs:1,
-        outputs:2,
+        outputs:3,
         icon: "feed.png",
         label: function() {
-            return this.name||"speech2text";
+            return this.name||"microPi";
         }
     });
 </script>
@@ -27,11 +28,6 @@
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-	<div class="form-row">
-        <label for="node-input-filename"><i class="icon-tag"></i>Filename</label>
-        <input type="text" id="node-input-filename" placeholder="Name">
-    </div>
     </div>
 	<div class="form-row">
         <label for="node-input-domain"><i class="icon-tag"></i>Domain</label>
@@ -62,11 +58,20 @@
         <input type="text" id="node-input-silence" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-debug"><i class="icon-tag"></i>Debug</label>
+        <label for="node-input-debug"><i class="icon-tag"></i> Debug</label>
         <select id="node-input-debug">
                 <option value=false>false</option>
                 <option value=true>true</option>
         </select>
+    </div>
+    <p>Settings filewriter</p>
+    <div class="form-row">
+        <label for="node-input-filename"><i class="icon-tag"></i>Filename</label>
+        <input type="text" id="node-input-filename" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-mode"><i class="icon-tag"></i> mode</label>
+        <input type="text" id="node-input-mode" placeholder="666">
     </div>
 </script>
 
