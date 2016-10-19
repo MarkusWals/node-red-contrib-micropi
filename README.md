@@ -1,28 +1,28 @@
-MicroPi
+#MicroPi
 
 A set of nodes for recording and streaming audio from an usb microphone connected to a Raspberry Pi in Node-Red.
 
 
 Nodes:
 
-MicroPi
-    To record send boolean true as msg.payload
-    To stop send false
+#MicroPi
 
-    3 Outputs:
+To record send boolean true as msg.payload, to stop send false.
 
-        1. Streaming audio as raw L16
-        2. Wav file as a buffer with metadata
-        3. Status messages
-        
-Microphone
-    To record send boolean true as msg.payload
-    To stop send false
+3 Outputs:
 
-    Streams Audio as raw L16 from the microphone
+1. Streaming audio as raw L16
+2. Wav file as a buffer with metadata
+3. Status messages
 
-Wav-Filewriter
-    Pipes the audio stream into a wav file on the sdcard
+#Microphone
+
+Streams Audio as raw L16 from the microphone. To record send boolean true as msg.payload, to stop send false.
+
+
+#Wav-Filewriter
+
+Pipes the audio stream into a wav file on the sdcard
     
 
 Important Notice!! MicroPi Requires to have NodeJS version > 6.5.x and Node-Red version > 0.14.x installed, note that those available via apt-get WILL NOT WORK.
