@@ -25,7 +25,10 @@ Streams Audio as raw L16 from the microphone. To record send boolean true as msg
 Pipes the audio stream into a wav file on the sdcard
     
 
-Important Notice!! MicroPi Requires to have NodeJS version > 6.5.x and Node-Red version > 0.14.x installed, note that those available via apt-get WILL NOT WORK.
+
+###Important Notice!! 
+
+MicroPi Requires to have NodeJS version > 6.5.x and Node-Red version > 0.14.x installed, note that those available via apt-get WILL NOT WORK.
 
 For information on how to get the newest versions the easiest way just check http://thisdavej.com/beginners-guide-to-installing-node-js
  
