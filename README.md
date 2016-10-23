@@ -7,9 +7,9 @@ Demo Flow:
 https://flows.nodered.org/flow/2267b12494608d62037e2f8043b955ae
 
 
-Nodes:
+#Nodes:
 
-#MicroPi
+##MicroPi
 
 To record send boolean true as msg.payload, to stop send false.
 
@@ -19,12 +19,12 @@ To record send boolean true as msg.payload, to stop send false.
 2. Wav file as a buffer with metadata
 3. Status messages
 
-#Microphone
+##Microphone
 
 Streams Audio as raw L16 from the microphone. To record send boolean true as msg.payload, to stop send false.
 
 
-#Wav-Filewriter
+##Wav-Filewriter
 
 Pipes the audio stream into a wav file on the sdcard
     
