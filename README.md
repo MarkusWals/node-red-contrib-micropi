@@ -2,6 +2,10 @@
 
 A set of nodes for recording and streaming audio from an usb microphone connected to a Raspberry Pi in Node-Red.
 
+Demo Flow:
+
+https://flows.nodered.org/flow/2267b12494608d62037e2f8043b955ae
+
 
 Nodes:
 
