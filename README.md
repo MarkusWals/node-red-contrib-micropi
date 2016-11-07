@@ -2,6 +2,11 @@
 
 A set of nodes for recording and streaming audio from an usb microphone connected to a Raspberry Pi in Node-Red.
 
+###Authors
+* Lucas Kummer
+* Ing. Michael Pliskal
+* Markus Wals
+
 Demo Flow:
 
 https://flows.nodered.org/flow/2267b12494608d62037e2f8043b955ae
@@ -37,4 +42,5 @@ MicroPi Requires to have NodeJS version > 6.5.x and Node-Red version > 0.14.x in
 For information on how to get the newest versions the easiest way just check http://thisdavej.com/beginners-guide-to-installing-node-js
  
 Tested and working on: npm 3.10.3, node v6.5.0, node-red v0.14.6
+
 
