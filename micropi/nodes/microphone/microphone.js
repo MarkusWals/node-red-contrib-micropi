@@ -37,6 +37,10 @@ module.exports = function(RED) {
             this.stopRecord();
         }
     });
+    
+    this.on('close', function() {
+        this.stopRecord();
+    });
 
     this.startRecord = function(timeout) {
         mic.start(node, timeout);
